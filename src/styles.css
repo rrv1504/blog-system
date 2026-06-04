@@ -9,14 +9,20 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 button,
 input,
 textarea {
   font: inherit;
+  min-width: 0;
 }
 
 button {
@@ -31,6 +37,7 @@ button:disabled {
 
 main {
   min-height: 100vh;
+  width: 100%;
 }
 
 .topbar {
@@ -38,13 +45,30 @@ main {
   background: linear-gradient(135deg, #12282d 0%, #1f4b47 100%);
   color: #fff;
   display: flex;
+  gap: 18px;
   justify-content: space-between;
-  padding: 22px clamp(18px, 4vw, 56px);
+  padding: 18px clamp(16px, 4vw, 56px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
 }
 
 .topbar h1,
 .topbar p {
   margin: 0;
+}
+
+.topbar h1 {
+  font-size: clamp(1.45rem, 3vw, 2.15rem);
+  line-height: 1.12;
+}
+
+.topbar-heading {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  min-width: 0;
 }
 
 .eyebrow {
@@ -61,6 +85,20 @@ main {
   flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-end;
+  min-width: 0;
+}
+
+.nav-toggle {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  color: #fff;
+  display: none;
+  flex: 0 0 auto;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
 }
 
 .icon-actions button,
@@ -87,6 +125,16 @@ main {
   min-height: 40px;
   padding: 8px 13px;
   position: relative;
+  white-space: nowrap;
+}
+
+.session-user {
+  color: rgba(255, 255, 255, 0.78);
+  font-weight: 800;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .session .nav-active {
@@ -115,10 +163,11 @@ main {
   align-items: center;
   display: grid;
   gap: 32px;
-  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
   margin: 0 auto;
   max-width: 1080px;
-  padding: 72px clamp(18px, 5vw, 48px);
+  padding: clamp(38px, 7vw, 72px) clamp(16px, 5vw, 48px);
+  width: 100%;
 }
 
 .auth-panel h1 {
@@ -139,7 +188,8 @@ main {
 .auth-form {
   display: grid;
   gap: 16px;
-  padding: 24px;
+  padding: clamp(18px, 4vw, 24px);
+  min-width: 0;
 }
 
 .auth-form h2 {
@@ -186,6 +236,11 @@ textarea {
   width: 100%;
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: #7a8587;
+}
+
 textarea {
   resize: vertical;
 }
@@ -206,6 +261,7 @@ textarea:focus {
   justify-content: center;
   min-height: 42px;
   padding: 10px 15px;
+  text-align: center;
 }
 
 .primary {
@@ -221,7 +277,7 @@ textarea:focus {
 .page {
   margin: 0;
   max-width: none;
-  padding: 34px clamp(18px, 4vw, 56px) 56px;
+  padding: clamp(22px, 4vw, 34px) clamp(16px, 4vw, 56px) clamp(36px, 6vw, 56px);
   width: 100%;
 }
 
@@ -231,7 +287,8 @@ textarea:focus {
 }
 
 .compose-panel {
-  padding: 20px;
+  padding: clamp(18px, 4vw, 24px);
+  width: 100%;
 }
 
 .compose-panel h2 {
@@ -265,6 +322,7 @@ textarea:focus {
 
 .editor-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: flex-end;
 }
@@ -272,7 +330,7 @@ textarea:focus {
 .feed {
   display: grid;
   gap: clamp(22px, 3vw, 34px);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
 }
 
 .post-card {
@@ -282,6 +340,7 @@ textarea:focus {
   box-shadow: none;
   overflow: hidden;
   padding: 0;
+  min-width: 0;
 }
 
 .post-card > :not(.post-image) {
@@ -330,6 +389,7 @@ textarea:focus {
   font-size: 1.2rem;
   line-height: 1.25;
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .compact-author .avatar {
@@ -371,12 +431,18 @@ textarea:focus {
   gap: 16px;
   justify-content: space-between;
   padding-top: 20px;
+  min-width: 0;
 }
 
 .author-row {
   align-items: center;
   display: flex;
   gap: 12px;
+  min-width: 0;
+}
+
+.author-row > div {
+  min-width: 0;
 }
 
 .avatar,
@@ -409,6 +475,7 @@ textarea:focus {
   font-size: 1.45rem;
   line-height: 1.2;
   margin: 0 0 5px;
+  overflow-wrap: anywhere;
 }
 
 .post-header p,
@@ -421,11 +488,13 @@ textarea:focus {
 .icon-actions,
 .post-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
 .post-body {
   margin: 18px 0;
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
 
@@ -480,10 +549,12 @@ textarea:focus {
   display: flex;
   gap: 10px;
   padding: 10px 12px;
+  min-width: 0;
 }
 
 .comment p {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .comment-form {
@@ -507,6 +578,7 @@ textarea:focus {
   gap: 18px;
   margin: 0 auto;
   max-width: 980px;
+  width: 100%;
 }
 
 .back-button {
@@ -551,6 +623,7 @@ textarea:focus {
   gap: 22px;
   margin: 0 auto;
   max-width: 980px;
+  width: 100%;
 }
 
 .profile-card,
@@ -566,7 +639,8 @@ textarea:focus {
   align-items: center;
   display: flex;
   gap: 20px;
-  padding: 24px;
+  padding: clamp(18px, 4vw, 24px);
+  min-width: 0;
 }
 
 .profile-card h2,
@@ -575,7 +649,8 @@ textarea:focus {
 }
 
 .profile-card h2 {
-  font-size: 2rem;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  overflow-wrap: anywhere;
 }
 
 .profile-photo {
@@ -588,7 +663,7 @@ textarea:focus {
 .stats-grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 .stats-grid div {
@@ -615,11 +690,13 @@ textarea:focus {
   display: flex;
   gap: 12px;
   padding: 18px;
+  min-width: 0;
 }
 
 .notification-card p,
 .notification-card span {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .notification-card span {
@@ -669,27 +746,131 @@ textarea:focus {
   }
 
   .topbar {
-    align-items: flex-start;
-    gap: 16px;
+    align-items: stretch;
+    gap: 12px;
     flex-direction: column;
   }
 
+  .topbar-heading {
+    width: 100%;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
   .session {
+    background: rgba(8, 26, 30, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    display: none;
     justify-content: flex-start;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .session.open {
+    display: flex;
+  }
+
+  .session button {
+    flex: 1 1 150px;
+  }
+
+  .session-user {
+    flex: 1 1 100%;
+    max-width: none;
+    order: 10;
   }
 
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .article-card .post-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .icon-actions {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 520px) {
+  .topbar {
+    padding: 14px 14px;
+  }
+
+  .topbar h1 {
+    font-size: 1.35rem;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+  }
+
+  .page {
+    padding: 18px 14px 34px;
+  }
+
+  .auth-panel {
+    gap: 22px;
+    padding: 30px 14px;
+  }
+
+  .auth-panel h1 {
+    font-size: 2rem;
+  }
+
+  .auth-form,
+  .compose-panel {
+    border-radius: 8px;
+    box-shadow: 0 10px 28px rgba(22, 37, 42, 0.08);
+  }
+
   .feed {
     grid-template-columns: 1fr;
   }
 
+  .grid-card-content {
+    padding-top: 12px;
+  }
+
   .article-card .post-image {
     aspect-ratio: 16 / 10;
+  }
+
+  .post-card > :not(.post-image) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .article-card .post-header h2 {
+    font-size: 1.65rem;
+  }
+
+  .article-card .post-body {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  .post-actions button,
+  .post-actions span {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .comment {
+    align-items: flex-start;
+  }
+
+  .comment-form {
+    grid-template-columns: 1fr;
+  }
+
+  .comment-form button {
+    width: 100%;
   }
 
   .profile-card {
@@ -697,7 +878,27 @@ textarea:focus {
     flex-direction: column;
   }
 
+  .profile-photo {
+    height: 88px;
+    width: 88px;
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .notification-card {
+    padding: 14px;
+  }
+
+  .editor-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .editor-actions button,
+  .primary,
+  .ghost {
+    width: 100%;
   }
 }
