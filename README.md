@@ -1,71 +1,96 @@
 # Blog Platform
 
-A full-stack blogging platform where users can register, log in, publish posts, edit or delete their own posts, comment on posts, and like or unlike posts.
+A full-stack MERN blog platform where users can register, log in, publish posts, edit their profile, like posts, comment on articles, and manage their own writing.
+
+Live frontend:
+
+```text
+https://rrv1504.github.io/blog-system/
+```
+
+Live backend API:
+
+```text
+https://blog-system-v4j5.onrender.com/api
+```
 
 ## Features
 
 - User registration and login
 - JWT-based authentication
-- Create, read, update, and delete blog posts
-- Owner-only edit and delete authorization
-- Comment system
-- Like and unlike system
-- Responsive React dashboard
-- Modular backend structure with routes, controllers, services, middleware, and utilities
+- Responsive blog grid on the homepage
+- Full article page with likes and comments
+- Like posts from the homepage grid
+- Create, edit, and delete your own posts
+- Profile page with editable user details
+- Profile page showing posts written by the logged-in user
+- Notifications for recent likes and comments on your posts
 - MongoDB Atlas persistence with Mongoose models
-- Seed script with at least 20 sample blog posts
+- Seed script with sample users and at least 20 posts
+- GitHub Pages frontend deployment
+- Render backend deployment
 
 ## Tech Stack
 
 - React
 - Vite
 - Express
-- JSON Web Token
-- bcryptjs
 - MongoDB Atlas
 - Mongoose
+- JSON Web Token
+- bcryptjs
 - lucide-react
 
 ## Project Structure
 
 ```text
 Blog Platform/
-├── server/
-│   ├── config/
-│   │   └── env.js
-│   ├── controllers/
-│   │   ├── auth.controller.js
-│   │   └── post.controller.js
-│   ├── data/
-│   │   └── fileStore.js
-│   ├── middleware/
-│   │   ├── asyncHandler.js
-│   │   ├── auth.middleware.js
-│   │   └── error.middleware.js
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   ├── index.js
-│   │   └── post.routes.js
-│   ├── services/
-│   │   ├── auth.service.js
-│   │   └── post.service.js
-│   ├── utils/
-│   │   ├── httpError.js
-│   │   ├── serializers.js
-│   │   └── validation.js
-│   ├── app.js
-│   └── index.js
-├── src/
-│   ├── components/
-│   ├── services/
-│   ├── utils/
-│   ├── App.jsx
-│   ├── config.js
-│   ├── main.jsx
-│   └── styles.css
-├── index.html
-├── package.json
-└── README.md
+|-- .github/
+|   `-- workflows/
+|       `-- deploy-frontend.yml
+|-- server/
+|   |-- config/
+|   |   |-- db.js
+|   |   `-- env.js
+|   |-- controllers/
+|   |   |-- auth.controller.js
+|   |   `-- post.controller.js
+|   |-- middleware/
+|   |   |-- asyncHandler.js
+|   |   |-- auth.middleware.js
+|   |   `-- error.middleware.js
+|   |-- models/
+|   |   |-- Post.js
+|   |   `-- User.js
+|   |-- routes/
+|   |   |-- auth.routes.js
+|   |   |-- index.js
+|   |   `-- post.routes.js
+|   |-- seed/
+|   |   |-- sampleData.js
+|   |   `-- seedData.js
+|   |-- services/
+|   |   |-- auth.service.js
+|   |   `-- post.service.js
+|   |-- utils/
+|   |   |-- httpError.js
+|   |   |-- serializers.js
+|   |   `-- validation.js
+|   |-- app.js
+|   `-- index.js
+|-- src/
+|   |-- components/
+|   |-- services/
+|   |-- utils/
+|   |-- App.jsx
+|   |-- config.js
+|   |-- main.jsx
+|   `-- styles.css
+|-- .env.example
+|-- index.html
+|-- package.json
+|-- vite.config.js
+`-- README.md
 ```
 
 ## Getting Started
@@ -74,6 +99,15 @@ Install dependencies:
 
 ```bash
 npm install
+```
+
+Create a `.env` file in the project root:
+
+```text
+PORT=5050
+CLIENT_ORIGIN=http://127.0.0.1:5174
+JWT_SECRET=your-secret-key
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/blog-platform?retryWrites=true&w=majority
 ```
 
 Start the frontend and backend together:
@@ -88,9 +122,9 @@ Open the app:
 http://127.0.0.1:5174
 ```
 
-If port `5174` is already busy, Vite will automatically show another local URL in the terminal, such as `http://127.0.0.1:5175`.
+If port `5174` is busy, Vite will print another local URL such as `http://127.0.0.1:5175`.
 
-Backend API:
+Local backend API:
 
 ```text
 http://127.0.0.1:5050/api
@@ -128,6 +162,12 @@ npm run build
 
 Creates a production frontend build.
 
+```bash
+npm run preview
+```
+
+Serves the production build locally.
+
 ## API Endpoints
 
 ### Auth
@@ -137,6 +177,8 @@ Creates a production frontend build.
 | POST | `/api/auth/register` | Register a new user |
 | POST | `/api/auth/login` | Log in a user |
 | GET | `/api/auth/me` | Get current logged-in user |
+| GET | `/api/auth/profile` | Get profile stats and notifications |
+| PUT | `/api/auth/me` | Update profile details |
 
 ### Posts
 
@@ -150,16 +192,45 @@ Creates a production frontend build.
 | POST | `/api/posts/:id/comments` | Add comment to a post |
 | POST | `/api/posts/:id/like` | Like or unlike a post |
 
-## Environment Variables
-
-Create a `.env` file in the project root before starting the backend. You can copy `.env.example` and replace the MongoDB URI with your Atlas connection string:
+Protected endpoints require an authorization header:
 
 ```text
-PORT=5050
-CLIENT_ORIGIN=http://127.0.0.1:5174
-JWT_SECRET=your-secret-key
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster-url>/blog-platform?retryWrites=true&w=majority
+Authorization: Bearer <token>
 ```
+
+## Deployment
+
+### Frontend: GitHub Pages
+
+The frontend is deployed by `.github/workflows/deploy-frontend.yml`.
+
+The workflow builds the Vite app with:
+
+```text
+VITE_API_URL=https://blog-system-v4j5.onrender.com/api
+```
+
+After pushing to `main`, GitHub Actions builds `dist/` and publishes it to GitHub Pages.
+
+### Backend: Render
+
+Render web service settings:
+
+```text
+Runtime: Node
+Build Command: npm install
+Start Command: npm run server
+```
+
+Render environment variables:
+
+```text
+MONGODB_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_key
+CLIENT_ORIGIN=https://rrv1504.github.io
+```
+
+Do not commit `.env` to GitHub. Add production secrets only in Render.
 
 ## Data Storage
 
@@ -179,7 +250,7 @@ To reset demo users and posts before seeding:
 npm run seed -- --reset
 ```
 
-Demo login after seeding:
+Demo user password after seeding:
 
 ```text
 Password123
@@ -187,13 +258,14 @@ Password123
 
 ## Authorization Rules
 
+- Anyone can read published posts.
 - Only logged-in users can create posts, comment, or like posts.
 - Only the post owner can edit or delete that post.
-- Anyone can read published posts.
+- Users can edit only their own profile details.
 
 ## Build Check
 
-To verify the frontend build:
+Verify the frontend build:
 
 ```bash
 npm run build
